@@ -12,17 +12,17 @@ int main(){
         for(auto &p:seg){cin>>p.first>>p.second; --p.first; --p.second;}
         bool ok=true;
         for(auto [l,r]:seg){
-            int len=r-l+1, choose=-1;
-            vector<int> order={0,1,2};
-            sort(order.begin(),order.end(),[&](int a,int b){return rem[a]<rem[b];});
-            for(int avoid:order){
-                int a=(avoid+1)%3,b=(avoid+2)%3;
-                if(rem[a]+rem[b]>=len){choose=avoid; break;}
+            int len=r-l+1;
+            vector<pair<pair<int,int>, pair<int,int>>> cand;
+            for(int a=0;a<3;a++) for(int b=a+1;b<3;b++){
+                if(rem[a]+rem[b]>=len){
+                    cand.push_back({{rem[a]+rem[b], max(rem[a], rem[b])}, {a,b}});
+                }
             }
-            if(choose==-1){ok=false;break;}
-            vector<int> use;
-            for(int c=0;c<3;c++) if(c!=choose) use.push_back(c);
-            sort(use.begin(),use.end(),[&](int a,int b){return rem[a]>rem[b];});
+            if(cand.empty()){ok=false;break;}
+            sort(cand.begin(), cand.end());
+            vector<int> use={cand[0].second.first, cand[0].second.second};
+            sort(use.begin(),use.end(),[&](int a,int b){return rem[a]<rem[b];});
             for(int i=l;i<=r;i++){
                 int c = rem[use[0]]>0 ? use[0] : use[1];
                 ans[i]=ch[c]; rem[c]--;
