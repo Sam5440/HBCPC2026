@@ -22,6 +22,8 @@ $IncludePaths = @(
     "web",
     "subagents",
     "README.md",
+    "DATA_RELIABILITY_REPORT.md",
+    "subagent_report.md",
     "problem_list.md",
     "manifest.json",
     "requirements.txt",
@@ -64,6 +66,10 @@ foreach ($rel in $IgnoreCandidates) {
     if (Test-Path $path) {
         Remove-Item -Recurse -Force $path
     }
+}
+
+Get-ChildItem -Path $PackageRoot -Recurse -Force -Directory -Filter ".cph" | ForEach-Object {
+    Remove-Item -LiteralPath $_.FullName -Recurse -Force
 }
 
 if (Test-Path $ZipPath) {

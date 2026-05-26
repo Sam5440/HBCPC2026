@@ -15,6 +15,8 @@ __pycache__/
 *.spec
 *.pid
 node_modules/
+.cph/
+**/.cph/
 
 # Generated caches and packaging outputs
 release/
