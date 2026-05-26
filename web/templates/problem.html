@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="panel problem-title">
+  <div>
+    <p class="kicker">Problem {{ problem.letter }}</p>
+    <h1>{{ problem.name }}</h1>
+  </div>
+  <div class="actions">
+    <span class="tag">{{ problem.type }}</span>
+    <span class="tag">{{ problem.case_count }} tests</span>
+  </div>
+</section>
+
+<section class="problem-workbench">
+  <article class="statement markdown-body">
+    {{ statement_html }}
+  </article>
+
+  <aside class="submit-panel">
+    <div class="submit-panel-head">
+      <p class="kicker">Submit</p>
+      <h2>提交 C++17 代码</h2>
+    </div>
+    <form class="submit-grid compact-submit" method="post" enctype="multipart/form-data">
+      <label class="upload-box">
+        <span>上传源码文件</span>
+        <input type="file" name="source" accept=".cpp,.cc,.cxx,.txt">
+      </label>
+      <label class="code-box">
+        <span>在线粘贴代码</span>
+        <textarea name="code" spellcheck="false">{{ sample_code }}</textarea>
+      </label>
+      <div class="submit-actions">
+        <button class="button primary" type="submit">编译并评测</button>
+        <span>逐组运行本地数据，显示每个数据点实际输出。</span>
+      </div>
+    </form>
+  </aside>
+</section>
+{% endblock %}

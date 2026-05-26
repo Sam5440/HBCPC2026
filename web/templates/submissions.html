@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="panel">
+  <div>
+    <p class="kicker">Local runs</p>
+    <h1>提交记录</h1>
+  </div>
+</section>
+
+<section class="problem-table">
+  <div class="table-head">
+    <span>运行</span>
+    <span>运行 ID</span>
+    <span>时间</span>
+    <span></span>
+    <span></span>
+  </div>
+  {% for run in runs %}
+    <article class="problem-row">
+      <strong>Run</strong>
+      <span>{{ run.id }}</span>
+      <span>{{ run.mtime }}</span>
+      <span></span>
+      <span></span>
+    </article>
+  {% else %}
+    <article class="problem-row">
+      <strong>-</strong>
+      <span>暂无提交</span>
+      <span></span>
+      <span></span>
+      <span></span>
+    </article>
+  {% endfor %}
+</section>
+{% endblock %}

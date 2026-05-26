@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="panel intro">
+  <div>
+    <p class="kicker">第十届河北省大学生程序设计竞赛</p>
+    <h1>本地题目评测平台</h1>
+  </div>
+  <div class="stats">
+    <span>{{ problems|length }} 题</span>
+    <span>每题 25 组数据</span>
+    <span>C++17</span>
+  </div>
+</section>
+
+<section class="problem-table">
+  <div class="table-head">
+    <span>题号</span>
+    <span>题目</span>
+    <span>类型</span>
+    <span>数据</span>
+    <span></span>
+  </div>
+  {% for p in problems %}
+    <article class="problem-row">
+      <strong>{{ p.letter }}</strong>
+      <a href="{{ url_for('problem_detail', letter=p.letter) }}">{{ p.name }}</a>
+      <span class="tag">{{ p.type }}</span>
+      <span>{{ p.case_count }} 组</span>
+      <a class="button" href="{{ url_for('problem_detail', letter=p.letter) }}">进入</a>
+    </article>
+  {% endfor %}
+</section>
+{% endblock %}

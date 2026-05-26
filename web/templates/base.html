@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ title or "HBCPC Local Judge" }}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='app.css') }}">
+  <script>
+    window.MathJax = {
+      loader: {
+        load: ['[tex]/ams', '[tex]/noerrors', '[tex]/noundefined']
+      },
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true,
+        packages: {'[+]': ['ams', 'noerrors', 'noundefined']}
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      },
+      chtml: {
+        fontURL: "{{ url_for('static', filename='mathjax/es5/output/chtml/fonts/woff-v2') }}"
+      }
+    };
+  </script>
+  <script defer src="{{ url_for('static', filename='mathjax/es5/tex-chtml.js') }}"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="{{ url_for('index') }}">
+      <span class="brand-mark">H</span>
+      <span>HBCPC Local Judge</span>
+    </a>
+    <nav>
+      <a href="{{ url_for('index') }}">题目</a>
+      <a href="{{ url_for('submissions') }}">提交记录</a>
+    </nav>
+  </header>
+
+  <main class="shell">
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div class="notice">{{ messages[0] }}</div>
+      {% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

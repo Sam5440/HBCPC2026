@@ -1,0 +1,85 @@
+{
+  "A": {
+    "name": "求求你不要再摔馍片了",
+    "type": "normal",
+    "time_limit": 2.0,
+    "memory_limit_mb": 256
+  },
+  "B": {
+    "name": "一句祝贺",
+    "type": "normal",
+    "time_limit": 1.0,
+    "memory_limit_mb": 128
+  },
+  "C": {
+    "name": "世界树",
+    "type": "normal",
+    "time_limit": 4.0,
+    "memory_limit_mb": 512
+  },
+  "D": {
+    "name": "简单字符串题",
+    "type": "normal",
+    "time_limit": 4.0,
+    "memory_limit_mb": 512
+  },
+  "E": {
+    "name": "电梯",
+    "type": "constructive",
+    "time_limit": 4.0,
+    "memory_limit_mb": 512,
+    "validator": "checker/E/validator.cpp"
+  },
+  "F": {
+    "name": "猜 01 序列",
+    "type": "interactive",
+    "time_limit": 2.0,
+    "memory_limit_mb": 256,
+    "interactor": "checker/F/interactor.cpp"
+  },
+  "G": {
+    "name": "建设高铁",
+    "type": "normal",
+    "time_limit": 4.0,
+    "memory_limit_mb": 512
+  },
+  "H": {
+    "name": "可能是字符串签到题",
+    "type": "normal",
+    "time_limit": 3.0,
+    "memory_limit_mb": 512
+  },
+  "I": {
+    "name": "山海关老冰糕",
+    "type": "normal",
+    "time_limit": 2.0,
+    "memory_limit_mb": 256
+  },
+  "J": {
+    "name": "海鲜大排档点生蚝",
+    "type": "normal",
+    "time_limit": 2.0,
+    "memory_limit_mb": 256
+  },
+  "K": {
+    "name": "灯带",
+    "type": "constructive",
+    "time_limit": 3.0,
+    "memory_limit_mb": 512,
+    "validator": "checker/K/validator.cpp"
+  },
+  "L": {
+    "name": "贪吃蛇",
+    "type": "special_judge",
+    "time_limit": 3.0,
+    "memory_limit_mb": 512,
+    "checker": "checker/L/checker.cpp"
+  },
+  "M": {
+    "name": "拯救猫猫",
+    "type": "special_judge",
+    "time_limit": 3.0,
+    "memory_limit_mb": 512,
+    "checker": "checker/M/checker.cpp"
+  }
+}

@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="panel result-head">
+  <div>
+    <p class="kicker">Run {{ result.run_id }}</p>
+    <h1>{{ result.letter }} · {{ result.problem.name }}</h1>
+  </div>
+  <div class="score">
+    <strong>{{ result.score }}</strong>
+    <span>{{ result.accepted }}/{{ result.total }} AC</span>
+  </div>
+</section>
+
+{% if result.compile_error %}
+  <section class="case-card ce">
+    <h2>CE</h2>
+    <pre>{{ result.compile_error }}</pre>
+  </section>
+{% else %}
+  <section class="result-list">
+    {% for r in result.results %}
+      <article class="case-card {{ r.status|lower }}">
+        <div class="case-line">
+          <strong>{{ r.case }}</strong>
+          <span class="status">{{ r.status }}</span>
+          <span>{{ r.time_ms }} ms</span>
+        </div>
+        {% if r.message %}
+          <pre class="judge-message">{{ r.message }}</pre>
+        {% endif %}
+        <div class="actual-block">
+          <div class="block-title">actual output</div>
+          {% if r.actual %}
+            <pre class="actual-output">{{ r.actual }}</pre>
+          {% else %}
+            <pre class="actual-output empty-output">(no stdout captured)</pre>
+          {% endif %}
+        </div>
+        {% if r.diff %}
+          <details open>
+            <summary>diff</summary>
+            <pre>{{ r.diff }}</pre>
+          </details>
+        {% elif r.status == "WA" %}
+          <details>
+            <summary>expected output</summary>
+            <pre>{{ r.expected }}</pre>
+          </details>
+        {% endif %}
+      </article>
+    {% endfor %}
+  </section>
+{% endif %}
+{% endblock %}

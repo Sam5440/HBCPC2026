@@ -1,0 +1,33 @@
+# Build and runtime artifacts
+build/
+dist/
+web/build/
+web/submissions/
+web_runtime/
+__pycache__/
+*.pyc
+*.pyo
+*.log
+*.out
+*.err
+*.zip
+*.exe
+*.spec
+*.pid
+node_modules/
+
+# Generated caches and packaging outputs
+release/
+HBCPC-OJ.spec
+HBCPC-OJ.pid
+web/flask.pid
+
+# Subagent local outputs
+subagents/*/bin/
+subagents/*/results.csv
+subagents/*/official_results.csv
+subagents/*/tmp_*
+subagents/*/*.exe
+subagents/*/*.out
+subagents/*/*.err
+subagents/*/__pycache__/
