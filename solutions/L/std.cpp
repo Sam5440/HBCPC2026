@@ -1,36 +1,90 @@
 #include <bits/stdc++.h>
 using namespace std;
-int main(){
-    ios::sync_with_stdio(false); cin.tie(nullptr);
-    cout.setf(ios::fixed); cout<<setprecision(12);
-    int T; if(!(cin>>T)) return 0;
+using ll = long long;
+
+struct Group {
+    long double ang;
+    long double r2;
+    int cnt;
+};
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    cout.setf(ios::fixed);
+    cout << setprecision(12);
+
+    int T;
+    if (!(cin >> T)) return 0;
     const long double PI = acosl(-1.0L);
-    while(T--){
-        int n,k; cin>>n>>k;
-        vector<pair<long double,long double>> a(n);
-        for(int i=0;i<n;i++){
-            long double x,y; cin>>x>>y;
-            long double ang=atan2l(y,x); if(ang<0) ang += 2*PI;
-            long double r2=x*x+y*y;
-            a[i]={ang,r2};
+
+    while (T--) {
+        int n, k;
+        cin >> n >> k;
+
+        map<pair<ll, ll>, Group> mp;
+        for (int i = 0; i < n; i++) {
+            ll x, y;
+            cin >> x >> y;
+            ll g = std::gcd(llabs(x), llabs(y));
+            pair<ll, ll> key = {x / g, y / g};
+
+            long double ang = atan2l((long double)y, (long double)x);
+            if (ang < 0) ang += 2 * PI;
+            long double r2 = (long double)x * x + (long double)y * y;
+
+            auto &grp = mp[key];
+            if (grp.cnt == 0) {
+                grp.ang = ang;
+                grp.r2 = r2;
+            } else {
+                grp.r2 = max(grp.r2, r2);
+            }
+            grp.cnt++;
         }
-        if(k==1){ cout<<"0.000000000000\n"; continue; }
-        sort(a.begin(),a.end());
-        vector<long double> ang(2*n), r2(2*n);
-        for(int i=0;i<2*n;i++){ ang[i]=a[i%n].first + (i>=n?2*PI:0); r2[i]=a[i%n].second; }
+
+        vector<Group> a;
+        for (auto &kv : mp) a.push_back(kv.second);
+        sort(a.begin(), a.end(), [](const Group &x, const Group &y) {
+            return x.ang < y.ang;
+        });
+
+        int g = (int)a.size();
+        long double best = 1e100L;
         deque<int> dq;
-        long double best=1e100L;
-        for(int j=0;j<2*n;j++){
-            while(!dq.empty() && r2[dq.back()]<=r2[j]) dq.pop_back();
-            dq.push_back(j);
-            int i=j-k+1;
-            if(i<0) continue;
-            while(!dq.empty() && dq.front()<i) dq.pop_front();
-            if(i<n){
-                long double width=ang[j]-ang[i];
-                best=min(best, 0.5L*width*r2[dq.front()]);
+        int r = 0;
+        int have = 0;
+
+        auto angle_at = [&](int idx) {
+            return a[idx % g].ang + (idx >= g ? 2 * PI : 0);
+        };
+        auto r2_at = [&](int idx) {
+            return a[idx % g].r2;
+        };
+        auto cnt_at = [&](int idx) {
+            return a[idx % g].cnt;
+        };
+
+        for (int l = 0; l < g; l++) {
+            if (r < l) r = l;
+            while (r < l + g && have < k) {
+                while (!dq.empty() && r2_at(dq.back()) <= r2_at(r)) dq.pop_back();
+                dq.push_back(r);
+                have += cnt_at(r);
+                r++;
+            }
+
+            if (have >= k) {
+                long double width = angle_at(r - 1) - angle_at(l);
+                best = min(best, 0.5L * width * r2_at(dq.front()));
+            }
+
+            if (r > l) {
+                have -= cnt_at(l);
+                if (!dq.empty() && dq.front() == l) dq.pop_front();
             }
         }
+
         cout << (double)best << "\n";
     }
 }

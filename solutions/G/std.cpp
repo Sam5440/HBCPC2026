@@ -30,7 +30,7 @@ int main(){
         if(op.type==1){ a[op.c]=op.t; continue; }
         int k=op.c;
         vector<int> id(n); iota(id.begin(),id.end(),1);
-        nth_element(id.begin(), id.begin()+k, id.end(), [&](int x,int y){ if(a[x]!=a[y]) return a[x]>a[y]; return x<y; });
+        if(k<n) nth_element(id.begin(), id.begin()+k, id.end(), [&](int x,int y){ if(a[x]!=a[y]) return a[x]>a[y]; return x<y; });
         id.resize(k);
         vector<char> sel(n+1,0); for(int x:id) sel[x]=1;
         if(k<=1){ cout<<0<<"\n"; continue; }
