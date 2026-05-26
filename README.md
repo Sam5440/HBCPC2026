@@ -1,3 +1,5 @@
+# [在线评测地址](https://hydro.ac/d/HBCPC2026/p)：https://hydro.ac/d/HBCPC2026/p
+
 # HBCPC Local Judge
 
 这是一个由 AI 基于 `OJ题目.md` 中的题面反向推导并生成的本地 OJ 评测与验证系统。项目内容包括题面拆分、测试数据、标准解、暴力解、checker/validator/interactor、Subagent 验证报告、Flask Web 评测平台，以及 Windows 单文件 EXE 打包产物。
