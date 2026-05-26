@@ -23,6 +23,7 @@ $IncludePaths = @(
     "subagents",
     "README.md",
     "DATA_RELIABILITY_REPORT.md",
+    "SOLUTION_REPORT.md",
     "subagent_report.md",
     "problem_list.md",
     "manifest.json",
