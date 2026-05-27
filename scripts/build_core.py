@@ -807,11 +807,13 @@ int main(int argc,char**argv){
         int n,m; in>>n>>m; vector<string> grid(n); for(auto &s:grid) in>>s;
         int x,y; if(!(out>>x>>y)) return 1;
         vector<pair<int,int>> dogs; for(int i=0;i<n;i++)for(int j=0;j<m;j++) if(dog(grid[i][j])) dogs.push_back({i,j});
+        pair<int,int> best={-1,-1};
+        for(auto [r,c]:dogs) if(can_sleep(grid,r,c)){ best={r,c}; break; }
         if(x==-1&&y==-1){
-            for(auto [r,c]:dogs) if(can_sleep(grid,r,c)) return 1;
+            if(best.first!=-1) return 1;
         }else{
             --x;--y; if(x<0||x>=n||y<0||y>=m||!dog(grid[x][y])) return 1;
-            if(!can_sleep(grid,x,y)) return 1;
+            if(best!=make_pair(x,y)) return 1;
         }
     }
     return 0;
@@ -1272,6 +1274,15 @@ def write_inputs(seed):
         "1\n2 2\n1000000 999999\n999999 999998\n",
         encoding="utf-8",
     )
+    extra_m = {
+        "26_edge": "1\n4 3\n.D#\nS..\n#.#\nE..\n",
+        "27_edge": "1\n4 3\n.D#\nS..\n...\nE..\n",
+        "28_edge": "1\n4 5\n##D##\nS....\n#R.#.\nE....\n",
+        "29_edge": "1\n4 6\n###D##\nS.....\nR...#.\nE.....\n",
+        "31_edge": "1\n6 7\n#D##D##\nS....E#\n.#.#..L\n.#...##\n.###.##\n.....##\n",
+    }
+    for stem, text in extra_m.items():
+        (ROOT / "data" / "M" / f"{stem}.in").write_text(text, encoding="utf-8")
 
 
 def compile_std(letter):

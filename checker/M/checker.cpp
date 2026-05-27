@@ -26,11 +26,13 @@ int main(int argc,char**argv){
         int n,m; in>>n>>m; vector<string> grid(n); for(auto &s:grid) in>>s;
         int x,y; if(!(out>>x>>y)) return 1;
         vector<pair<int,int>> dogs; for(int i=0;i<n;i++)for(int j=0;j<m;j++) if(dog(grid[i][j])) dogs.push_back({i,j});
+        pair<int,int> best={-1,-1};
+        for(auto [r,c]:dogs) if(can_sleep(grid,r,c)){ best={r,c}; break; }
         if(x==-1&&y==-1){
-            for(auto [r,c]:dogs) if(can_sleep(grid,r,c)) return 1;
+            if(best.first!=-1) return 1;
         }else{
             --x;--y; if(x<0||x>=n||y<0||y>=m||!dog(grid[x][y])) return 1;
-            if(!can_sleep(grid,x,y)) return 1;
+            if(best!=make_pair(x,y)) return 1;
         }
     }
     return 0;

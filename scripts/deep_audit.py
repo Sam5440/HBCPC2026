@@ -97,19 +97,25 @@ def compile_all():
 
 def assert_layout():
     note("[2/7] checking data layout")
-    expected = [f"{i:02d}_regular" for i in range(1, 11)]
-    expected += [f"{i:02d}_stress" for i in range(11, 19)]
-    expected += [f"{i:02d}_edge" for i in range(19, 26)]
+    required = [f"{i:02d}_regular" for i in range(1, 11)]
+    required += [f"{i:02d}_stress" for i in range(11, 19)]
+    required += [f"{i:02d}_edge" for i in range(19, 26)]
     for letter in LETTERS:
         d = ROOT / "data" / letter
         if not d.is_dir():
             raise AuditError(f"missing data directory: {d}")
         stems_in = sorted(p.stem for p in d.glob("*.in"))
         stems_ans = sorted(p.stem for p in d.glob("*.ans"))
-        if stems_in != expected:
-            raise AuditError(f"{letter}: input files do not match expected 25-case layout")
-        if stems_ans != expected:
-            raise AuditError(f"{letter}: answer files do not match expected 25-case layout")
+        if stems_in != stems_ans:
+            raise AuditError(f"{letter}: input/answer stems differ")
+        missing = [stem for stem in required if stem not in stems_in]
+        if missing:
+            raise AuditError(f"{letter}: missing required data files: {missing}")
+        extras = [stem for stem in stems_in if stem not in required]
+        for stem in extras:
+            parts = stem.split("_", 1)
+            if len(parts) != 2 or not parts[0].isdigit() or int(parts[0]) < 26 or parts[1] != "edge":
+                raise AuditError(f"{letter}: unexpected extra data file stem: {stem}")
 
 
 def run_validator(exe, inp, out, timeout=20):
