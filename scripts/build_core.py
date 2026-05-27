@@ -572,7 +572,7 @@ STD["L"] = BRUTE["L"] = r'''
 #include <bits/stdc++.h>
 using namespace std;
 using ll = long long;
-struct Group{ long double ang,r2; int cnt; };
+struct Group{ long double ang,r2; ll dx,dy; int cnt; };
 int main(){
     ios::sync_with_stdio(false); cin.tie(nullptr);
     cout.setf(ios::fixed); cout<<setprecision(12);
@@ -588,7 +588,7 @@ int main(){
             long double ang=atan2l((long double)y,(long double)x); if(ang<0) ang += 2*PI;
             long double r2=(long double)x*x+(long double)y*y;
             auto &grp=mp[key];
-            if(grp.cnt==0){ grp.ang=ang; grp.r2=r2; }
+            if(grp.cnt==0){ grp.ang=ang; grp.r2=r2; grp.dx=key.first; grp.dy=key.second; }
             else grp.r2=max(grp.r2,r2);
             grp.cnt++;
         }
@@ -597,7 +597,14 @@ int main(){
         int g=a.size(), r=0, have=0;
         deque<int> dq;
         long double best=1e100L;
-        auto angle_at=[&](int idx){return a[idx%g].ang + (idx>=g?2*PI:0);};
+        auto angle_between=[&](int from,int to){
+            const Group &u=a[from%g], &v=a[to%g];
+            __int128 cross=(__int128)u.dx*v.dy-(__int128)u.dy*v.dx;
+            __int128 dot=(__int128)u.dx*v.dx+(__int128)u.dy*v.dy;
+            long double res=atan2l((long double)cross,(long double)dot);
+            if(res<0) res += 2*PI;
+            return res;
+        };
         auto r2_at=[&](int idx){return a[idx%g].r2;};
         auto cnt_at=[&](int idx){return a[idx%g].cnt;};
         for(int l=0;l<g;l++){
@@ -609,7 +616,7 @@ int main(){
                 r++;
             }
             if(have>=k){
-                long double width=angle_at(r-1)-angle_at(l);
+                long double width=angle_between(l,r-1);
                 best=min(best, 0.5L*width*r2_at(dq.front()));
             }
             if(r>l){
@@ -1261,6 +1268,10 @@ def write_inputs(seed):
         d.mkdir(parents=True, exist_ok=True)
         for idx, (cat, text) in enumerate(cases, 1):
             (d / f"{idx:02d}_{cat}.in").write_text(text, encoding="utf-8")
+    (ROOT / "data" / "L" / "30_edge.in").write_text(
+        "1\n2 2\n1000000 999999\n999999 999998\n",
+        encoding="utf-8",
+    )
 
 
 def compile_std(letter):

@@ -1015,6 +1015,8 @@ const long double PI = acosl(-1.0L);
 struct Group {
     long double ang;
     long double r2;
+    long long dx;
+    long long dy;
     int cnt;
 };
 
@@ -1037,6 +1039,8 @@ for (int i = 0; i < n; i++) {
     if (grp.cnt == 0) {
         grp.ang = ang;
         grp.r2 = r2;
+        grp.dx = key.first;
+        grp.dy = key.second;
     } else {
         grp.r2 = max(grp.r2, r2);
     }
@@ -1062,8 +1066,14 @@ int r = 0;
 int have = 0;
 long double best = 1e100L;
 
-auto angle_at = [&](int idx) {
-    return a[idx % g].ang + (idx >= g ? 2 * PI : 0);
+auto angle_between = [&](int from, int to) {
+    const Group &u = a[from % g];
+    const Group &v = a[to % g];
+    __int128 cross = (__int128)u.dx * v.dy - (__int128)u.dy * v.dx;
+    __int128 dot = (__int128)u.dx * v.dx + (__int128)u.dy * v.dy;
+    long double res = atan2l((long double)cross, (long double)dot);
+    if (res < 0) res += 2 * PI;
+    return res;
 };
 auto r2_at = [&](int idx) {
     return a[idx % g].r2;
@@ -1081,7 +1091,7 @@ for (int l = 0; l < g; l++) {
     }
 
     if (have >= k) {
-        long double width = angle_at(r - 1) - angle_at(l);
+        long double width = angle_between(l, r - 1);
         best = min(best, 0.5L * width * r2_at(dq.front()));
     }
 
@@ -1098,7 +1108,7 @@ for (int l = 0; l < g; l++) {
 
 单调队列中保存的是候选最大 `max_r2` 的方向组下标。队尾保持 `max_r2` 递减，队首就是当前窗口最大值。
 
-通过 `idx % g` 和 `idx >= g ? 2pi : 0`，跨越 0 度的窗口会变成普通连续窗口。
+窗口端点夹角用 `atan2(cross, dot)` 直接计算，避免两个接近极角相减造成精度损失。
 
 ### 复杂度
 
@@ -1108,6 +1118,7 @@ for (int l = 0; l < g; l++) {
 
 - `atan2` 返回值可能为负，需要加 `2pi`。
 - 同一射线上的点必须先压缩成一组，否则可能错误排除同角度远点。
+- 接近共线的大坐标点不要用两个极角直接相减，应使用叉积和点积求夹角。
 - 输出需要足够精度。
 - `k=1` 是特殊情况，答案为 0。
 

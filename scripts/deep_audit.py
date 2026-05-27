@@ -562,24 +562,31 @@ def l_expected_case(points, k):
     if k == 1:
         return 0.0
     pi = math.pi
+
+    def ccw_angle(a, b):
+        ax, ay = a
+        bx, by = b
+        res = math.atan2(ax * by - ay * bx, ax * bx + ay * by)
+        if res < 0:
+            res += 2 * pi
+        return res
+
     arr = []
     for x, y in points:
         ang = math.atan2(y, x)
         if ang < 0:
             ang += 2 * pi
-        arr.append((ang, x * x + y * y))
+        arr.append((ang, x, y, x * x + y * y))
     arr.sort()
     n = len(arr)
     best = float("inf")
     for i in range(n):
         for step in range(n):
             j = i + step
-            width = (arr[j % n][0] + (2 * pi if j >= n else 0.0)) - arr[i][0]
+            width = ccw_angle((arr[i][1], arr[i][2]), (arr[j % n][1], arr[j % n][2]))
             inside = []
-            for ang, r2 in arr:
-                rel = ang - arr[i][0]
-                if rel < -1e-14:
-                    rel += 2 * pi
+            for _, x, y, r2 in arr:
+                rel = ccw_angle((arr[i][1], arr[i][2]), (x, y))
                 if rel <= width + 1e-14:
                     inside.append(r2)
             if len(inside) >= k:
@@ -588,7 +595,9 @@ def l_expected_case(points, k):
 
 
 def audit_l(exes, rng, count):
-    cases = []
+    cases = [
+        (2, 2, [(1000000, 999999), (999999, 999998)]),
+    ]
     for _ in range(count):
         n = rng.randint(1, 12)
         k = rng.randint(1, n)
